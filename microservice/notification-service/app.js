@@ -1,18 +1,13 @@
 const express = require('express');
 const app = express();
-const PORT = 3001;
+require('dotenv').config();
+const NOTIFICATION_SERVICE_PORT = parseInt(process.env.NOTIFICATION_SERVICE_PORT, 10) || 3001;
 
 app.use(express.json());
 
-app.get("/", (request, response) => {
-    response.send("Notification Microservice.")
-})
+const notificationRoutes = require('./routes/notifications.routes');
+app.use('/api', notificationRoutes);
 
-app.get("/notify", (request, response) => {
-    console.log("New notification")
-    response.send("Notification Sent")
-})
-
-app.listen(PORT, () => {
-    console.log(`Notification microservice is running on http://localhost:${PORT}`)
+app.listen(NOTIFICATION_SERVICE_PORT, () => {
+    console.log(`Task microservice is running on http://localhost:${NOTIFICATION_SERVICE_PORT}`)
 })

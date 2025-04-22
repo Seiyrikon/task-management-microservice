@@ -1,18 +1,12 @@
 const express = require('express');
 const app = express();
-const TASK_SERVICE_PORT = 3000;
-const NOTIFICATION_SERVICE_PORT = 3001;
+require('dotenv').config();
+const TASK_SERVICE_PORT = parseInt(process.env.TASK_SERVICE_PORT, 10) || 3000;
 
 app.use(express.json());
 
-app.get("/", (request, response) => {
-    response.send("Task Microservice.")
-})
-
-app.get("/add-task", (request, response) => {
-    response.send("Add New Task")
-    fetch(`http://localhost:${NOTIFICATION_SERVICE_PORT}/notify`)
-})
+const taskRoutes = require('./routes/tasks.routes');
+app.use('/api', taskRoutes);
 
 app.listen(TASK_SERVICE_PORT, () => {
     console.log(`Task microservice is running on http://localhost:${TASK_SERVICE_PORT}`)
